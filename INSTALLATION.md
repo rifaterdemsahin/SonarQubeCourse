@@ -29,7 +29,7 @@ To make these changes permanent, add them to `/etc/sysctl.conf`.
 
 1. **Start Minikube**
    ```bash
-   minikube start --memory=4096 --cpus=2
+   minikube start --memory=9096 --cpus=4
    ```
 
 2. **Apply SonarQube Kubernetes Configuration**
