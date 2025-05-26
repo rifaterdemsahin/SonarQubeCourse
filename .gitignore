@@ -1,0 +1,6 @@
+# Ignore GitHub secrets
+Symbols/github-secrets.yaml
+
+# General ignores
+*.env
+*.secret

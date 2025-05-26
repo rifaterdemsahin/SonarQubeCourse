@@ -9,6 +9,8 @@
     ```bash
 kubectl apply -f Symbols/deployment_postgresql.yaml && kubectl apply -f Symbols/deployment_server.yaml && kubectl apply -f Symbols/pvc.yaml && kubectl apply -f Symbols/service_sonarqube.yaml
     ```
+- Github Secrets yamls
+- Gitignore not to be exposed
 - 🎨 Semblance file update
 - 🚀 Run
 - 💾 Commit

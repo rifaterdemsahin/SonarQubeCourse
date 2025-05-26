@@ -35,7 +35,10 @@ To make these changes permanent, add them to `/etc/sysctl.conf`.
 2. **Apply SonarQube Kubernetes Configuration name space at start**
    ```bash
 kubectl create namespace sonarqube
-# Replace the token and URL in github-secrets.yaml before running this command
+# Create github-secrets.yaml from the template and add your credentials
+cp Symbols/github-secrets.template.yaml Symbols/github-secrets.yaml
+# Edit github-secrets.yaml with your actual credentials
+# Then apply the configuration
 kubectl apply -f Symbols/github-secrets.yaml
 kubectl apply -f Symbols/deployment_postgresql.yaml && kubectl apply -f Symbols/deployment_server.yaml && kubectl apply -f Symbols/pvc.yaml && kubectl apply -f Symbols/service_sonarqube.yaml
    ```
