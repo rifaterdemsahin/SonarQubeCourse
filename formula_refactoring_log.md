@@ -60,7 +60,10 @@ kubectl apply -f Symbols/github-integration.yaml
 
 ### 🎯 Commit
 - Set Port visibility to public on codespaces ports
-- Check Sonarqube
+- Check Sonarqube that works on PVC
+    - https://fuzzy-happiness-55rwj7p494c4px-9000.app.github.dev/tutorials?id=rifaterdemsahin_SonarQubeCourse_067c4f08-21de-4da3-b6b8-a8ab7ea167ef&selectedTutorial=github-actions
+- Check Github Actions 
+    - https://github.com/rifaterdemsahin/SonarQubeCourse/actions
 
 ## 📚 Legend
 - 🛠️ Technical work/refactoring
