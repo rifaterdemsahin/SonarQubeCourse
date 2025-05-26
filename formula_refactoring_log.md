@@ -1,39 +1,51 @@
-## 🛠️ Paying Technical Debt by Refactoring
+# 🔄 SonarQube Setup and Configuration Log
 
-- 📝 Added formula_refactoring_log
-- 🔄 Update: install.md >>> environment.md 
-- 📄 Update: readme.md _readme.md
-- 🗑️ Delete: sonarqube-k8s.yaml
-- 🗑️ Add: sonarqube name space added for grouping > best practice 
-- ⚙️ Update environment:
-    ```bash
+## 🛠️ Technical Debt and Refactoring Changes
+
+### 📝 File Management
+- ✨ Created formula_refactoring_log.md
+- 🔄 Renamed install.md to environment.md
+- 📄 Updated readme.md to _readme.md
+- 🗑️ Removed sonarqube-k8s.yaml
+- 📁 Added sonarqube namespace for better organization
+
+### ⚙️ Environment Configuration
+```bash
 kubectl apply -f Symbols/deployment_postgresql.yaml && kubectl apply -f Symbols/deployment_server.yaml && kubectl apply -f Symbols/pvc.yaml && kubectl apply -f Symbols/service_sonarqube.yaml
-    ```
-    ```bash
+```
+
+### 🔐 Security Configuration
+```bash
 kubectl apply -f Symbols/github-secrets.yaml
 kubectl apply -f Symbols/github-integration.yaml    
 ```
 
-- Github Secrets yamls
-- Gitignore not to be exposed
-    # Ignore GitHub secrets
-    Symbols/github-secrets.yaml
+### 🔒 Security Management
+- Added GitHub Secrets YAML files
+- Updated .gitignore for security:
+  ```
+  # 🔐 GitHub secrets
+  Symbols/github-secrets.yaml
 
-    # General ignores
-    *.env
-    *.secret
+  # 📌 General security ignores
+  *.env
+  *.secret
+  ```
 
-- 🎨 Semblance file update
-- 🚀 Run
-- 💾 Commit
+### 🎯 Final Steps
+- 🎨 Updated semblance file
+- 🚀 Executed configuration
+- 💾 Committed changes
 
-Explanation:
-- 🛠️ - Represents technical work/refactoring
-- 📝 - New file creation
-- 🔄 - File updates/changes
-- 📄 - Document modification
-- 🗑️ - Deletion
-- ⚙️ - Configuration/environment setup
-- 🎨 - Style/appearance changes
-- 🚀 - Execution/running
-- 💾 - Saving changes/committing
+## 📚 Legend
+- 🛠️ Technical work/refactoring
+- 📝 New file creation
+- 🔄 File updates/changes
+- 📄 Document modification
+- 🗑️ Deletion
+- ⚙️ Configuration setup
+- 🎨 Style changes
+- 🚀 Execution
+- 💾 Save/commit
+- 🔐 Security-related
+- 📁 Directory/namespace changes
