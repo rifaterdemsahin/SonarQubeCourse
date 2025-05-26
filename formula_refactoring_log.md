@@ -46,6 +46,21 @@ kubectl apply -f Symbols/github-integration.yaml
 - 💾 Committed changes
 - Formula to rerun with oneliner script
 
+### 🎯 SonarQube inside settings from the ui
+- Add the necesary cat private key
+- Select organization
+- Select the repo again
+- Use global settings
+- analysis method githubs actions 
+- new token generate
+- update token > https://github.com/rifaterdemsahin/SonarQubeCourse/settings/secrets/actions/SONAR_TOKEN
+- update project key > sonar.projectKey=rifaterdemsahin_SonarQubeCourse_067c4f08-21de-4da3-b6b8-a8ab7ea167ef
+- Now we have a pvc
+
+
+### 🎯 Commit
+- Check Sonarqube
+
 ## 📚 Legend
 - 🛠️ Technical work/refactoring
 - 📝 New file creation
