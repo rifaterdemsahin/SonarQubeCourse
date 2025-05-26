@@ -93,6 +93,11 @@ Regular maintenance tasks:
 3. 📊 Monitor system resources
 4. 📝 Review and update quality profiles
 
+
+## Secrets in Repo
+- Set url and token
+   - https://github.com/rifaterdemsahin/SonarQubeCourse/settings/secrets/actions
+
 ## 📚 Additional Resources
 
 - 📖 [Official SonarQube Documentation](https://docs.sonarqube.org/)
