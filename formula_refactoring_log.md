@@ -4,6 +4,7 @@
 - 🔄 Update: install.md >>> environment.md 
 - 📄 Update: readme.md _readme.md
 - 🗑️ Delete: sonarqube-k8s.yaml
+- 🗑️ Add: sonarqube name space added for grouping > best practice 
 - ⚙️ Update environment:
     ```bash
 kubectl apply -f Symbols/deployment_postgresql.yaml && kubectl apply -f Symbols/deployment_server.yaml && kubectl apply -f Symbols/pvc.yaml && kubectl apply -f Symbols/service_sonarqube.yaml
