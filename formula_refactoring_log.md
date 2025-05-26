@@ -38,11 +38,13 @@ kubectl apply -f Symbols/github-integration.yaml
     - secrets
     - integration
     - private keys 
-    
+
 ### 🎯 Final Steps
 - 🎨 Updated semblance file
+- Update the environments file
 - 🚀 Executed configuration
 - 💾 Committed changes
+- Formula to rerun with oneliner script
 
 ## 📚 Legend
 - 🛠️ Technical work/refactoring

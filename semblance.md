@@ -114,3 +114,7 @@ If the issue persists, share the updated sonar-project.properties and workflow f
 
 ---
 
+Debug :kubectl describe pod -l app=sonarqube -n sonarqube
+
+---
+
