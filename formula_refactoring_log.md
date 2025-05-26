@@ -32,6 +32,9 @@ kubectl apply -f Symbols/github-integration.yaml
   *.secret
   ```
 
+### 🎯 Security
+- Implementation for the security steps included 
+
 ### 🎯 Final Steps
 - 🎨 Updated semblance file
 - 🚀 Executed configuration
