@@ -47,7 +47,7 @@ To make these changes permanent, add them to `/etc/sysctl.conf`.
 
 1. Get the SonarQube URL:
    ```bash
-   minikube service sonarqube --url
+   kubectl port-forward svc/sonarqube-service 9000:9000
    ```
 
 2. Open the URL in your browser
