@@ -1,0 +1,92 @@
+# SonarQube Installation Guide
+
+This guide provides step-by-step instructions for installing and configuring SonarQube using Kubernetes (Minikube).
+
+## Prerequisites
+
+Before starting the installation, ensure you have the following prerequisites installed:
+
+- Minikube
+- kubectl
+- A Linux/Unix-based system
+- At least 4GB of RAM available
+- Docker (optional, but recommended)
+
+## System Requirements
+
+### Memory Settings
+
+SonarQube requires specific memory settings to function properly. Run these commands before starting:
+
+```bash
+sudo sysctl -w vm.max_map_count=262144
+sudo sysctl -w fs.file-max=65536
+```
+
+To make these changes permanent, add them to `/etc/sysctl.conf`.
+
+## Installation Steps
+
+1. **Start Minikube**
+   ```bash
+   minikube start --memory=4096 --cpus=2
+   ```
+
+2. **Apply SonarQube Kubernetes Configuration**
+   ```bash
+   kubectl apply -f sonarqube-k8s.yaml
+   ```
+
+3. **Verify Installation**
+   ```bash
+   kubectl get pods
+   kubectl get services
+   ```
+
+## Accessing SonarQube
+
+1. Get the SonarQube URL:
+   ```bash
+   minikube service sonarqube --url
+   ```
+
+2. Open the URL in your browser
+
+3. Default credentials:
+   - Username: admin
+   - Password: admin
+
+## Post-Installation Steps
+
+1. Change the default admin password
+2. Configure your first project
+3. Set up quality gates
+4. Install relevant plugins
+
+## Troubleshooting
+
+Common issues and their solutions:
+
+1. **Pod fails to start**
+   - Check memory settings
+   - Verify resource limits in yaml file
+   - Check logs: `kubectl logs [pod-name]`
+
+2. **Memory Issues**
+   - Ensure vm.max_map_count is set correctly
+   - Verify sufficient RAM allocation to Minikube
+
+## Maintenance
+
+Regular maintenance tasks:
+
+1. Backup your SonarQube data
+2. Update SonarQube version when new releases are available
+3. Monitor system resources
+4. Review and update quality profiles
+
+## Additional Resources
+
+- [Official SonarQube Documentation](https://docs.sonarqube.org/)
+- [Kubernetes Documentation](https://kubernetes.io/docs/)
+- [Minikube Documentation](https://minikube.sigs.k8s.io/docs/)
