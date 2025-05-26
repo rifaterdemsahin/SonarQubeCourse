@@ -64,6 +64,8 @@ kubectl apply -f Symbols/github-integration.yaml
     - https://fuzzy-happiness-55rwj7p494c4px-9000.app.github.dev/tutorials?id=rifaterdemsahin_SonarQubeCourse_067c4f08-21de-4da3-b6b8-a8ab7ea167ef&selectedTutorial=github-actions
 - Check Github Actions 
     - https://github.com/rifaterdemsahin/SonarQubeCourse/actions
+- Execution Success
+    - https://github.com/rifaterdemsahin/SonarQubeCourse/actions/runs/15260273727/job/42916682011
 
 ## 📚 Legend
 - 🛠️ Technical work/refactoring
