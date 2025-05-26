@@ -1,13 +1,13 @@
-# SonarQube Port Forwarding
+# 🎯 SonarQube Port Forwarding
 
-To access SonarQube locally, you'll need to set up port forwarding:
+To access SonarQube locally, follow these steps 🚀:
 
 ```bash
-# Forward SonarQube's default port (9000)
-minikube start --memory=9096 --cpus=4
-kubectl port-forward svc/sonarqube-service 9000:9000
+# Start Minikube and forward SonarQube port in one go! 🔥
+minikube start --memory=9096 --cpus=4 && cd /workspaces/SonarQubeCourse/Symbols && kubectl apply -f deployment_postgresql.yaml -f deployment_server.yaml -f pvc.yaml -f service_sonarqube.yaml -f github-secrets.yaml -f github-integration.yaml -n sonarqube && kubectl port-forward svc/sonarqube-service 9000:9000 -n sonarqube
 ```
 
-Access SonarQube through your web browser at:
+🌐 Access SonarQube in your web browser at:
 - http://localhost:9000
 
+✨ Happy code analysis! ✨
