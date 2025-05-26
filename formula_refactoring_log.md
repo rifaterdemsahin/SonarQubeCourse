@@ -59,6 +59,7 @@ kubectl apply -f Symbols/github-integration.yaml
 
 
 ### 🎯 Commit
+- Set Port visibility to public on codespaces ports
 - Check Sonarqube
 
 ## 📚 Legend
