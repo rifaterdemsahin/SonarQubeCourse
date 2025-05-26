@@ -5,8 +5,8 @@ metadata:
   namespace: sonarqube
 type: Opaque
 stringData:
-  GITHUB_APP_ID: 1325434 # Replace with your GitHub App ID
-  GITHUB_APP_PRIVATE_KEY: sonarqubecourseapp.2025-05-26.private-key.pem # Replace with your GitHub App private key
-  GITHUB_CLIENT_ID: Iv23li0pkUtl3Hv8R9k6 # Replace with your GitHub Client ID
-  GITHUB_CLIENT_SECRET: 35a203b7269dd85dce1b5c5be56354043bc41c0a
-  GITHUB_API_URL: https://api.github.com
+  GITHUB_APP_ID: "1325434" # Replace with your GitHub App ID
+  GITHUB_APP_PRIVATE_KEY: "sonarqubecourseapp.2025-05-26.private-key.pem" # Replace with your GitHub App private key
+  GITHUB_CLIENT_ID: "Iv23li0pkUtl3Hv8R9k6" # Replace with your GitHub Client ID
+  GITHUB_CLIENT_SECRET: "35a203b7269dd85dce1b5c5be56354043bc41c0a"
+  GITHUB_API_URL: "https://api.github.com"
