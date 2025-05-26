@@ -1,3 +1,7 @@
+## Semblance 
+
+Error : Sonar Qube Setup Configuration
+
 The error occurs because the SonarScanner CLI is receiving an HTML response from a GitHub Codespaces port forwarding page instead of the expected SonarQube server response. This suggests that the SonarQube server URL configured in your setup is pointing to a GitHub Codespaces URL (likely due to a misconfiguration in sonar-project.properties or the GitHub Actions workflow), causing the scanner to fail when trying to communicate with the SonarQube server.
 Here’s how to fix the issue:
 1. Verify SonarQube Server URL

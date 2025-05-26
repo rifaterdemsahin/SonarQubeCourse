@@ -34,7 +34,10 @@ To make these changes permanent, add them to `/etc/sysctl.conf`.
 
 2. **Apply SonarQube Kubernetes Configuration**
    ```bash
-   kubectl apply -f sonarqube-k8s.yaml
+   kubectl apply -f symbols/deployment-postgres.yaml
+   kubectl apply -f symbols/deployment-server.yaml 
+   kubectl apply -f symbols/pvc.yaml
+   kubectl apply -f symbols/service_sonarqube.yaml
    ```
 
 3. **Verify Installation**
