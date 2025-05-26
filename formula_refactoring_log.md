@@ -6,10 +6,7 @@
 - 🗑️ Delete: sonarqube-k8s.yaml
 - ⚙️ Update environment:
     ```bash
-    kubectl apply -f symbols/deployment-postgres.yaml
-    kubectl apply -f symbols/deployment-server.yaml 
-    kubectl apply -f symbols/pvc.yaml
-    kubectl apply -f symbols/service_sonarqube.yaml
+kubectl apply -f Symbols/deployment_postgresql.yaml && kubectl apply -f Symbols/deployment_server.yaml && kubectl apply -f Symbols/pvc.yaml && kubectl apply -f Symbols/service_sonarqube.yaml
     ```
 - 🎨 Semblance file update
 - 🚀 Run

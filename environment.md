@@ -32,12 +32,10 @@ To make these changes permanent, add them to `/etc/sysctl.conf`.
    minikube start --memory=9096 --cpus=4
    ```
 
-2. **Apply SonarQube Kubernetes Configuration**
+2. **Apply SonarQube Kubernetes Configuration name space at start**
    ```bash
-   kubectl apply -f symbols/deployment-postgres.yaml
-   kubectl apply -f symbols/deployment-server.yaml 
-   kubectl apply -f symbols/pvc.yaml
-   kubectl apply -f symbols/service_sonarqube.yaml
+kubectl create namespace sonarqube
+kubectl apply -f Symbols/deployment_postgresql.yaml && kubectl apply -f Symbols/deployment_server.yaml && kubectl apply -f Symbols/pvc.yaml && kubectl apply -f Symbols/service_sonarqube.yaml
    ```
 
 3. **Verify Installation**
