@@ -34,7 +34,11 @@ kubectl apply -f Symbols/github-integration.yaml
 
 ### 🎯 Security
 - Implementation for the security steps included 
-
+- gitignore security files 
+    - secrets
+    - integration
+    - private keys 
+    
 ### 🎯 Final Steps
 - 🎨 Updated semblance file
 - 🚀 Executed configuration
