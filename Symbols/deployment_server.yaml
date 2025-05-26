@@ -31,16 +31,6 @@ spec:
             secretKeyRef:
               name: sonar-db-credentials
               key: POSTGRES_PASSWORD
-        - name: SONAR_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: github-credentials
-              key: SONAR_TOKEN
-        - name: SONAR_HOST_URL
-          valueFrom:
-            secretKeyRef:
-              name: github-credentials
-              key: SONAR_HOST_URL
         resources:
           limits:
             memory: "2Gi"
