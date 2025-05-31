@@ -34,6 +34,13 @@ spec:
             secretKeyRef:
               name: sonar-db-credentials
               key: POSTGRES_DB
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
