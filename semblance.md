@@ -1,5 +1,7 @@
 ## Semblance 
 
+### Errors found in the project and the solutions
+
 Error : Sonar Qube Setup Configuration
 
 The error occurs because the SonarScanner CLI is receiving an HTML response from a GitHub Codespaces port forwarding page instead of the expected SonarQube server response. This suggests that the SonarQube server URL configured in your setup is pointing to a GitHub Codespaces URL (likely due to a misconfiguration in sonar-project.properties or the GitHub Actions workflow), causing the scanner to fail when trying to communicate with the SonarQube server.
@@ -118,3 +120,81 @@ Debug :kubectl describe pod -l app=sonarqube -n sonarqube
 
 ---
 
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse/Symbols (main) $ kubectl port-forward svc/sonarqube 9000:9000 -n sonarqube
+error: unable to forward port because pod is not running. Current status=Pending
+
+
+error: unable to forward port because pod is not running. Current status=Pending
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse/Symbols (main) $ kubectl describe pod -l app=sonarqube -n sonarqube
+Name:             sonarqube-56f655c4b7-h84vw
+Namespace:        sonarqube
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Sat, 31 May 2025 16:59:35 +0000
+Labels:           app=sonarqube
+                  pod-template-hash=56f655c4b7
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.3
+IPs:
+  IP:           10.244.0.3
+Controlled By:  ReplicaSet/sonarqube-56f655c4b7
+Containers:
+  sonarqube:
+    Container ID:   
+    Image:          sonarqube:9.9-community
+    Image ID:       
+    Port:           9000/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       CreateContainerConfigError
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     2
+      memory:  4Gi
+    Requests:
+      cpu:      1
+      memory:   2Gi
+    Liveness:   http-get http://:9000/ delay=120s timeout=1s period=30s #success=1 #failure=3
+    Readiness:  http-get http://:9000/ delay=60s timeout=1s period=30s #success=1 #failure=3
+    Environment:
+      SONAR_JDBC_URL:       jdbc:postgresql://sonarqube-db:5432/sonar
+      SONAR_JDBC_USERNAME:  <set to the key 'POSTGRES_USER' in secret 'sonar-db-credentials'>      Optional: false
+      SONAR_JDBC_PASSWORD:  <set to the key 'POSTGRES_PASSWORD' in secret 'sonar-db-credentials'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4l6r6 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-4l6r6:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  113s              default-scheduler  Successfully assigned sonarqube/sonarqube-56f655c4b7-h84vw to minikube
+  Normal   Pulling    112s              kubelet            Pulling image "sonarqube:9.9-community"
+  Normal   Pulled     95s               kubelet            Successfully pulled image "sonarqube:9.9-community" in 17.312s (17.312s including waiting). Image size: 604265948 bytes.
+  Warning  Failed     5s (x9 over 95s)  kubelet            Error: secret "sonar-db-credentials" not found
+  Normal   Pulled     5s (x8 over 94s)  kubelet            Container image "sonarqube:9.9-community" already present on machine
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse/Symbols (main) $ 
+
+kubectl create namespace sonarqube 2>/dev/null || true && kubectl create secret generic sonar-db-credentials \
+  --namespace sonarqube \
+  --from-literal=POSTGRES_USER=sonar \
+  --from-literal=POSTGRES_PASSWORD=sonar123 \
+  --from-literal=POSTGRES_DB=sonar
