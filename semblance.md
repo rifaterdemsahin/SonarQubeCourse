@@ -198,3 +198,23 @@ kubectl create namespace sonarqube 2>/dev/null || true && kubectl create secret 
   --from-literal=POSTGRES_USER=sonar \
   --from-literal=POSTGRES_PASSWORD=sonar123 \
   --from-literal=POSTGRES_DB=sonar
+
+
+---
+
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse/Symbols (main) $ kubectl logs -l app=sonarqube -n sonarqube --previous
+ERROR: [1] bootstrap checks failed. You must address the points described in the following [1] lines before starting Elasticsearch.
+bootstrap check failure [1] of [1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+ERROR: Elasticsearch did not exit normally - check the logs at /opt/sonarqube/logs/sonarqube.log
+2025.05.31 17:11:54 INFO  es[][o.e.n.Node] stopping ...
+2025.05.31 17:11:54 INFO  es[][o.e.n.Node] stopped
+2025.05.31 17:11:54 INFO  es[][o.e.n.Node] closing ...
+2025.05.31 17:11:54 INFO  es[][o.e.n.Node] closed
+2025.05.31 17:11:54 WARN  app[][o.s.a.p.AbstractManagedProcess] Process exited with exit value [ElasticSearch]: 78
+2025.05.31 17:11:54 INFO  app[][o.s.a.SchedulerImpl] Process[ElasticSearch] is stopped
+2025.05.31 17:11:54 INFO  app[][o.s.a.SchedulerImpl] SonarQube is stopped
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse/Symbols (main) $ 
+
+
+sudo sysctl -w vm.max_map_count=262144
+sudo sysctl -w fs.file-max=65536
