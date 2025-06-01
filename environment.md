@@ -2,6 +2,17 @@
 
 This guide provides step-by-step instructions for installing and configuring SonarQube using Kubernetes (Minikube). 🚀
 
+## 📋 Prerequisites - Python Test Libraries
+
+Before starting the installation, ensure you have the Python test libraries installed:
+
+```bash
+# Install required Python testing packages
+pip install pytest pytest-cov
+```
+
+These packages are essential for running tests and generating coverage reports that SonarQube will analyze.
+
 ## 📋 Prerequisites
 
 Before starting the installation, ensure you have the following tools installed:

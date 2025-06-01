@@ -1,3 +1,7 @@
+Basic test code 
+python -m pytest /workspaces/SonarQubeCourse/Symbols/tests/scanfiles_test.py -v
+
+
 pip install coverage pytest && \
 coverage run -m pytest Symbols/tests/scanfiles_test.py && \
 coverage xml

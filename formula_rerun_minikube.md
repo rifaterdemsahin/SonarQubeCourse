@@ -1,6 +1,17 @@
 # 🎯 SonarQube Re-Run Guide
 
 ## 🔄 Resuming SonarQube in Minikube (Codespaces Paused State)
+## 📚 Prerequisites - Python Test Libraries
+
+Before proceeding, ensure you have the necessary Python test libraries installed:
+
+```bash
+# Install required Python testing packages
+pip install pytest pytest-cov
+```
+
+These packages are essential for running tests and generating coverage reports that SonarQube will analyze.
+
 
 ### 🚀 Step 1: Initialize Minikube
 ```bash
