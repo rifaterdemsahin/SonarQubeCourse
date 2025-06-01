@@ -16,15 +16,33 @@ jobs:
         with:
           python-version: '3.12'
           
+      - name: Debug workspace
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Directory structure:"
+          tree
+          echo "Python location:"
+          which python
+          echo "Content of current directory:"
+          ls -la
+          
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov
+          pip install pytest pytest-cov tree
           
       - name: Run tests with coverage
         run: |
-          cd /home/runner/work/SonarQubeCourse/SonarQubeCourse
-          python -m pytest Symbols/tests/scanfiles_test.py --cov=Symbols --cov-report=xml
+          pwd
+          echo "Content of Symbols directory:"
+          ls -la Symbols/
+          echo "Running tests from:"
+          python -m pytest Symbols/tests/scanfiles_test.py --cov=Symbols --cov-report=xml -v
+          echo "Coverage report location:"
+          ls -la coverage.xml
+          echo "Content of coverage.xml:"
+          head -n 20 coverage.xml
           
       - uses: SonarSource/sonarqube-scan-action@v5
         env:
