@@ -42,6 +42,8 @@ kubectl create secret generic sonar-db-credentials \
 
 Problem : 16:19:01.418 ERROR The folder 'tests' does not exist for 'rifaterdemsahin_SonarQubeCourse_AZcsPUc8EajcHBulmmLO' (base directory = /home/runner/work/SonarQubeCourse/SonarQubeCourse)
 
+6. Cant Code : We couldn't find any results matching selected criteria.
+
 
 **Solutions**:
 1. Server Configuration:
