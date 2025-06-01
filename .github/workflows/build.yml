@@ -40,6 +40,11 @@ jobs:
           coverage run -m pytest scanfiles_test.py
           coverage xml -o coverage.xml
           cat coverage.xml
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add coverage.xml
+          git commit -m "Add coverage report"
+          git push
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
