@@ -1,0 +1,12 @@
+[run]
+source = .
+relative_files = True
+
+[report]
+include = 
+    scanfiles.py
+    tests/scanfiles_test.py
+
+[xml]
+output = coverage.xml
+relative_paths = True
