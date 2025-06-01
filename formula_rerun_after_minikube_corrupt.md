@@ -83,3 +83,28 @@ kubectl rollout status deployment sonarqube -n sonarqube
 
 ✨ SonarQube should now be operational! ✨
 > add the configuration : obsidian://open?vault=secondbrain&file=secondbrain%2F4%20_Archieve%2Fresetup%20appid%20and%20config%20for%20sonarqube%20project%201%206%202025
+> organization select 
+> repo select
+> generate token 
+> token and url update : https://github.com/rifaterdemsahin/SonarQubeCourse/settings/secrets/actions
+
+
+Use a template file 
+# SonarQube Configuration 🌐
+SONAR_TOKEN=[SONAR_TOKEN]
+SONAR_HOST_URL=[SONARQUBE_HOST_URL]
+SONAR_PROJECT_KEY=[SONAR_PROJECT_KEY]
+
+# GitHub App Configuration 🔑
+GITHUB_APP_ID=[APP_ID]
+GITHUB_CLIENT_ID=[CLIENT_ID]
+GITHUB_CLIENT_SECRET=[CLIENT_SECRET]
+GITHUB_PRIVATE_KEY=[PRIVATE_KEY]
+GITHUB_PRIVATE_KEY_SHA256=[PRIVATE_KEY_SHA256]
+GITHUB_API_URL=[GITHUB_API_URL]
+
+# Webhook Configuration 🔗
+WEBHOOK_URL=[WEBHOOK_URL]
+WEBHOOK_SECRET=[WEBHOOK_SECRET]
+CALLBACK_URL=[CALLBACK_URL]
+Instructions for Use 🛠️
