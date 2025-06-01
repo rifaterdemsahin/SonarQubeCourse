@@ -35,10 +35,8 @@ jobs:
       - name: Run tests with coverage
         run: |
           pwd
-          echo "Content of Symbols directory:"
-          ls -la Symbols/
           echo "Running tests from:"
-          python -m pytest Symbols/tests/scanfiles_test.py --cov=Symbols --cov-report=xml -v
+          python -m pytest scanfiles_test.py --cov=Symbols --cov-report=xml -v
           echo "Coverage report location:"
           ls -la coverage.xml
           echo "Content of coverage.xml:"
