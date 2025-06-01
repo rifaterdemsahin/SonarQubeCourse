@@ -1,65 +1,57 @@
 import os
+import sys
 from datetime import datetime
-from typing import Dict, NamedTuple, Optional
 
-class FileStats(NamedTuple):
-    count: int
-    size: int
-    extensions: Dict[str, int]
+# Global variables (tech debt: should avoid globals)
+# Tech debt: should avoid globals
+file_count = 0
+total_size = 0
+extensions = {}
 
-def process_file(file_path: str) -> tuple[int, int, str]:
-    """Process a single file and return its stats."""
-    size = os.path.getsize(file_path)
-    ext = os.path.splitext(file_path)[1][1:].lower() if '.' in file_path else ''
+def list_files():
+    global file_count, total_size, extensions
     
-    print(f"{file_path} | Size: {size} bytes | Modified: "
-          f"{datetime.fromtimestamp(os.path.getmtime(file_path)).strftime('%Y-%m-%d %H:%M:%S')}")
+    # Hard-coded path (tech debt: not configurable)
+    project_path = "."
     
-    return 1, size, ext
-
-def list_files(project_path: Optional[str] = None) -> FileStats:
-    """
-    List files in a directory and collect statistics.
-    
-    Args:
-        project_path (Optional[str]): Path to the directory to scan. Defaults to current directory.
-        
-    Returns:
-        FileStats: Named tuple containing (file count, total size, extension counts)
-    """
-    if project_path is None:
-        project_path = "."
-        
-    file_count = 0
-    total_size = 0
-    extensions: Dict[str, int] = {}
-    
+    # No error handling (tech debt: what if directory doesn't exist?)
     for root, dirs, files in os.walk(project_path):
+        
+        # Mixed responsibilities in one function (tech debt: does too many things)
         for file in files:
-            if file.startswith('.'):
-                continue
-                
             file_path = os.path.join(root, file)
-            if not os.path.isfile(file_path):
-                continue
-                
-            count, size, ext = process_file(file_path)
-            file_count += count
-            total_size += size
-            if ext:
-                extensions[ext] = extensions.get(ext, 0) + 1
+            
+            # Nested conditions make it hard to read (tech debt: complex logic)
+            if not file.startswith('.'):
+                if os.path.isfile(file_path):
+                    size = os.path.getsize(file_path)
+                    
+                    # Long line that's hard to read (tech debt: formatting)
+                    print(f"{file_path} | Size: {size} bytes | Modified: {datetime.fromtimestamp(os.path.getmtime(file_path)).strftime('%Y-%m-%d %H:%M:%S')}")
+                    
+                    file_count += 1
+                    total_size += size
+                    
+                    # Getting file extension in a convoluted way (tech debt: overcomplicated)
+                    if '.' in file:
+                        ext = file.split('.')[-1].lower()
+                        if ext in extensions:
+                            extensions[ext] = extensions[ext] + 1
+                        else:
+                            extensions[ext] = 1
     
-    print("\n--- Summary ---")
+    ## Printing mixed with business logic (tech debt: separation of concerns)
+    print(f"\n--- Summary ---")
     print(f"Total files: {file_count}")
     print(f"Total size: {total_size} bytes")
-    print("File types found:")
+    print(f"File types found:")
     
-    for ext, count in sorted(extensions.items()):
-        print(f"  .{ext}: {count} files")
-    
-    return FileStats(file_count, total_size, extensions)
+    ## Inefficient sorting (tech debt: could be done better)
+    for ext in extensions:
+        print(f"  .{ext}: {extensions[ext]} files")
 
-if __name__ == '__main__':
-    print("Listing all files in project...")
-    list_files()
-    print("Done!")
+# No main guard (tech debt: runs immediately when imported)
+# No command line argument handling (tech debt: not flexible)
+print("Listing all files in project...")
+list_files()
+print("Done!")
