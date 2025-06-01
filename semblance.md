@@ -34,6 +34,11 @@ kubectl create secret generic sonar-db-credentials \
 - Authentication and access issues
 - Port visibility problems
 
+#### 4. Minikube stops
+
+**Problem**: Route issues and connection issules
+
+
 **Solutions**:
 1. Server Configuration:
    - Ensure SonarQube server is running
@@ -49,6 +54,7 @@ kubectl create secret generic sonar-db-credentials \
    - Review `sonar-project.properties`
    - Verify `sonar.host.url` setting
    - Configure port forwarding correctly
+4. minikube start 
 
 ### Debug Commands
 ```bash
