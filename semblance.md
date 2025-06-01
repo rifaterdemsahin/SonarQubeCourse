@@ -55,6 +55,9 @@ kubectl create secret generic sonar-db-credentials \
    - Verify `sonar.host.url` setting
    - Configure port forwarding correctly
 4. minikube start 
+5. ⚠️ Root Cause
+You're likely running this inside GitHub Codespaces, and the SonarScanner is trying to connect to a SonarQube server hosted locally (on localhost or 127.0.0.1) or on an inaccessible port.
+Set accesibility to public 
 
 ### Debug Commands
 ```bash
