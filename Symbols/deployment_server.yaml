@@ -47,11 +47,11 @@ spec:
           value: "-Xmx2g -Xms1g -XX:+HeapDumpOnOutOfMemoryError"
         resources:
           limits:
+            cpu: "4"
+            memory: "10Gi"
+          requests:
             cpu: "2"
             memory: "6Gi"
-          requests:
-            cpu: "1"
-            memory: "3Gi"
         livenessProbe:
           httpGet:
             path: /
