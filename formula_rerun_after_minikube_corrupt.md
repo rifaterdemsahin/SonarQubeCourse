@@ -1,149 +1,85 @@
-Here’s a rewritten, cleanly structured version tailored as a **step-by-step guide for an AI agent** (or a teammate) to reboot SonarQube after a corrupted Minikube instance:
+# 🛠️ SonarQube Recovery Guide: Post-Minikube Corruption
 
----
+This guide provides steps to restore SonarQube after Minikube corruption.
 
-# 🛠️ SonarQube Reboot Guide After Minikube Corruption
+## 📋 Prerequisites
 
-This guide walks through the full recovery process for running SonarQube locally when Minikube becomes corrupt or non-functional.
+- Docker installed and running
+- Minikube
+- kubectl
+- 9GB RAM available
+- 4 CPU cores
 
----
+## 🔄 Recovery Steps
 
-## 🔁 1. Reboot Minikube
-
-Start by attempting to start Minikube with appropriate resources:
-
-```bash
-minikube start --memory=9096 --cpus=4
-minikube status
-```
-
-### ❗ If You See This Error:
-
-```
-❌  K8S_INSTALL_FAILED_CONTAINER_RUNTIME_NOT_RUNNING
-```
-
-It means Minikube is in a broken state. Run the following to reset completely:
+### 1. Reset Minikube
 
 ```bash
 minikube delete --all
-minikube start --driver=docker --memory=9096 --cpus=4
+minikube start --driver=docker --memory=9096 --cpus=4 --kubernetes-version=v1.27.3
+minikube addons enable storage-provisioner
 ```
 
-Then, recheck status:
-
-```bash
-minikube status
-```
-
----
-
-## 🔧 2. System Prerequisites (Linux only)
-
-Ensure required system settings are applied:
+### 2. System Configuration (Linux)
 
 ```bash
 sudo sysctl -w vm.max_map_count=262144
 sudo sysctl -w fs.file-max=65536
 ```
 
----
-
-## 🧹 3. Cleanup Old Resources
-
-Delete any old SonarQube resources to avoid conflicts:
+### 3. Setup Environment
 
 ```bash
-kubectl delete namespace sonarqube --ignore-not-found=true
-sleep 10
-```
-
----
-
-## 🚀 4. Setup Namespace and Secrets
-
-Create the `sonarqube` namespace and DB secrets:
-
-```bash
+# Create namespace
 kubectl create namespace sonarqube
 
+# Create database secrets
 kubectl create secret generic sonar-db-credentials \
-  --namespace sonarqube \
-  --from-literal=POSTGRES_USER=sonar \
-  --from-literal=POSTGRES_PASSWORD=sonar123 \
-  --from-literal=POSTGRES_DB=sonar
+   --namespace sonarqube \
+   --from-literal=POSTGRES_USER=sonar \
+   --from-literal=POSTGRES_PASSWORD=sonar123 \
+   --from-literal=POSTGRES_DB=sonar
 ```
 
----
-
-## 📦 5. Apply Kubernetes Configurations
-
-Navigate to your deployment folder:
+### 4. Deploy Components
 
 ```bash
 cd /workspaces/SonarQubeCourse/Symbols
+
+# Apply configurations
+kubectl apply -f pvc.yaml -n sonarqube
+kubectl apply -f deployment_postgresql.yaml -n sonarqube
+kubectl apply -f deployment_server.yaml -f service_sonarqube.yaml -n sonarqube
+
+# Wait for deployments
+kubectl wait --for=condition=ready pod -l app=sonarqube-db -n sonarqube --timeout=120s
+kubectl wait --for=condition=ready pod -l app=sonarqube -n sonarqube --timeout=300s
 ```
 
-### Step-by-step Deployment:
-
-1. **Persistent Volume Claim**
-
-   ```bash
-   kubectl apply -f pvc.yaml -n sonarqube
-   sleep 5
-   ```
-
-2. **PostgreSQL Deployment**
-
-   ```bash
-   kubectl apply -f deployment_postgresql.yaml -n sonarqube
-   kubectl wait --for=condition=ready pod -l app=sonarqube-db -n sonarqube --timeout=120s
-   ```
-
-3. **SonarQube Server + Service**
-
-   ```bash
-   kubectl apply -f deployment_server.yaml -f service_sonarqube.yaml -n sonarqube
-   kubectl wait --for=condition=ready pod -l app=sonarqube -n sonarqube --timeout=300s
-   ```
-
-4. **(Optional) GitHub Integration**
-
-   ```bash
-   kubectl apply -f github-secrets.yaml -f github-integration.yaml -n sonarqube
-   ```
-
----
-
-## 🌐 6. Access SonarQube Locally
-
-Set up port forwarding:
+### 5. Access SonarQube
 
 ```bash
 kubectl port-forward svc/sonarqube 9000:9000 -n sonarqube
 ```
 
-Then visit [http://localhost:9000](http://localhost:9000)
+Visit: http://localhost:9000
+- Username: `admin`
+- Password: `admin`
 
-**Default Credentials**:
-
-* Username: `admin`
-* Password: `admin` (you’ll be prompted to change it on first login)
-
----
-
-## 🧪 7. Troubleshooting
-
-Check logs or pod states using:
+### 6. Troubleshooting
 
 ```bash
+kubectl get pods -n sonarqube
 kubectl logs -l app=sonarqube -n sonarqube
 kubectl logs -l app=sonarqube-db -n sonarqube
-kubectl get pods -n sonarqube
 ```
 
----
+## 🔍 Health Check
 
-✨ **You're now ready to scan code with SonarQube again!** ✨
+```bash
+kubectl get deployment sonarqube -n sonarqube
+kubectl rollout status deployment sonarqube -n sonarqube
+```
 
-Let me know if you want to convert this into a runnable script or automate it via GitHub Actions or Logic Apps.
+✨ SonarQube should now be operational! ✨
+> add the configuration : obsidian://open?vault=secondbrain&file=secondbrain%2F4%20_Archieve%2Fresetup%20appid%20and%20config%20for%20sonarqube%20project%201%206%202025
