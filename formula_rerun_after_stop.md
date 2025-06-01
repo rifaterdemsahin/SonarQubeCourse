@@ -1,10 +1,11 @@
 # 🎯 SonarQube Port Forwarding
 
 To access SonarQube locally, follow these steps 🚀:
-
+kubectl get pods -n sonarqube
 ```bash
 # Step 1: Start Minikube with sufficient resources
 minikube start --memory=9096 --cpus=4
+
 
 sudo sysctl -w vm.max_map_count=262144
 sudo sysctl -w fs.file-max=65536
