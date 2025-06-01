@@ -2,91 +2,100 @@ import unittest
 import os
 import tempfile
 import shutil
-from unittest.mock import patch
-import sys
-from io import StringIO
-
 from scanfiles import list_files, FileStats
 
-class TestFileListing(unittest.TestCase):
-    
+class TestScanFiles(unittest.TestCase):
     def setUp(self):
-        """Set up test fixtures before each test method."""
-        # Create a temporary directory for testing
+        """Create a temporary test directory with sample files."""
         self.test_dir = tempfile.mkdtemp()
-        self.original_cwd = os.getcwd()
         
-        # Create some test files
+        # Create test files structure
         self.create_test_files()
         
-        # Change to test directory
+        # Store original directory and move to test directory
+        self.original_dir = os.getcwd()
         os.chdir(self.test_dir)
-        
+
     def tearDown(self):
-        """Clean up after each test method."""
-        os.chdir(self.original_cwd)
+        """Clean up test directory after tests."""
+        os.chdir(self.original_dir)
         shutil.rmtree(self.test_dir)
-        
+
     def create_test_files(self):
-        """Create test files in the temporary directory."""
-        # Create regular files
-        with open(os.path.join(self.test_dir, "test.py"), "w") as f:
-            f.write("print('hello')")
-        with open(os.path.join(self.test_dir, "readme.txt"), "w") as f:
-            f.write("This is a readme file")
-        with open(os.path.join(self.test_dir, "config.json"), "w") as f:
-            f.write('{"key": "value"}')
-            
-        # Create a hidden file (should be ignored)
-        with open(os.path.join(self.test_dir, ".hidden"), "w") as f:
-            f.write("hidden content")
-            
+        """Create a set of test files with known structure."""
+        # Create some regular files
+        test_files = {
+            'test1.py': 'print("Hello")',
+            'test2.py': 'def test(): pass',
+            'readme.md': '# Test Project',
+            'config.json': '{"test": true}',
+            '.gitignore': '*.pyc\n.DS_Store',  # Hidden file
+        }
+        
+        # Create files in root
+        for filename, content in test_files.items():
+            file_path = os.path.join(self.test_dir, filename)
+            with open(file_path, 'w') as f:
+                f.write(content)
+        
         # Create a subdirectory with files
-        subdir = os.path.join(self.test_dir, "subdir")
+        subdir = os.path.join(self.test_dir, 'subdir')
         os.makedirs(subdir)
-        with open(os.path.join(subdir, "nested.py"), "w") as f:
-            f.write("# nested file")
+        with open(os.path.join(subdir, 'nested.py'), 'w') as f:
+            f.write('# Nested file')
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_list_files_function(self, mock_stdout):
-        """Test the list_files function returns correct statistics."""
-        result = list_files(".")
+    def test_file_counting(self):
+        """Test that files are counted correctly."""
+        stats = list_files(self.test_dir)
         
-        # Verify count, ensure we found the correct number of non-hidden files
-        self.assertEqual(result.count, 4, "Should find exactly 4 non-hidden files")
+        # We expect 5 non-hidden files (3 .py, 1 .md, 1 .json)
+        self.assertEqual(stats.file_count, 5)
         
-        # Verify we found the expected file types
-        self.assertEqual(result.extensions.get('py', 0), 2, "Should find 2 Python files")
-        self.assertEqual(result.extensions.get('txt', 0), 1, "Should find 1 text file")
-        self.assertEqual(result.extensions.get('json', 0), 1, "Should find 1 JSON file")
-        
-        # Verify hidden files were not included in extensions
-        self.assertNotIn('hidden', result.extensions, "Should not count hidden files")
-        
-        # Verify total size is positive (actual size will vary by platform)
-        self.assertGreater(result.size, 0, "Total size should be greater than 0")
+        # Check extension counts
+        self.assertEqual(stats.extensions['py'], 3)
+        self.assertEqual(stats.extensions['md'], 1)
+        self.assertEqual(stats.extensions['json'], 1)
 
-    def test_file_size_calculation(self):
-        """Test file size calculation for known content."""
-        file_path = os.path.join(self.test_dir, "known_size.txt")
-        content = "test content"
-        with open(file_path, "w") as f:
-            f.write(content)
-            
-        result = list_files(self.test_dir)
-        self.assertGreaterEqual(result.size, len(content), 
-                              "Total size should be at least the size of our test file")
+    def test_hidden_files_excluded(self):
+        """Test that hidden files are properly excluded."""
+        stats = list_files(self.test_dir)
+        
+        # .gitignore should not be counted
+        self.assertNotIn('gitignore', stats.extensions)
+        self.assertEqual(stats.file_count, 5)  # Only non-hidden files
+
+    def test_total_size(self):
+        """Test that file sizes are calculated correctly."""
+        stats = list_files(self.test_dir)
+        
+        # Calculate expected size manually
+        expected_size = sum(
+            os.path.getsize(os.path.join(root, file))
+            for root, _, files in os.walk(self.test_dir)
+            for file in files
+            if not file.startswith('.')
+        )
+        
+        self.assertEqual(stats.total_size, expected_size)
 
     def test_empty_directory(self):
-        """Test scanning an empty directory."""
+        """Test behavior with an empty directory."""
         empty_dir = tempfile.mkdtemp()
         try:
-            result = list_files(empty_dir)
-            self.assertEqual(result.count, 0, "Empty directory should have no files")
-            self.assertEqual(result.size, 0, "Empty directory should have zero total size")
-            self.assertEqual(result.extensions, {}, "Empty directory should have no extensions")
+            stats = list_files(empty_dir)
+            self.assertEqual(stats.file_count, 0)
+            self.assertEqual(stats.total_size, 0)
+            self.assertEqual(len(stats.extensions), 0)
         finally:
             shutil.rmtree(empty_dir)
+
+    def test_file_stats_initialization(self):
+        """Test FileStats class initialization."""
+        stats = FileStats()
+        self.assertEqual(stats.file_count, 0)
+        self.assertEqual(stats.total_size, 0)
+        self.assertIsNotNone(stats.extensions)
+        self.assertEqual(len(stats.extensions), 0)
 
 if __name__ == '__main__':
     unittest.main()
