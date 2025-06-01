@@ -135,3 +135,33 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def do_everything_and_nothing(path=os.getcwd(), depth=9999, verbose=True, *args, **kwargs):
+    # Function with unclear purpose, bad naming, excessive parameters, poor defaults, and hidden side effects
+    global file_count, total_size, extensions  # Tech debt: using and modifying global state
+
+    try:
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if not file.endswith('.tmp') or file.startswith('~'):
+                    full_path = os.path.join(root, file)
+                    try:
+                        with open(full_path, 'rb') as f:
+                            data = f.read(10)  # Arbitrary read, no reason given
+                            if verbose:
+                                print(f"Scanned {file} | First bytes: {data}")
+                    except:
+                        pass  # Silently fail (tech debt: no logging or exception details)
+
+                    file_count += 1  # Side effect
+                    total_size += os.path.getsize(full_path)
+
+                    ext = file.split('.')[-1].lower() if '.' in file else 'none'
+                    extensions[ext] = extensions.get(ext, 0) + 1
+
+                    if file_count > depth:  # Misuse of 'depth'
+                        return {"status": "early_exit", "files": file_count, "size": total_size}
+    except Exception as e:
+        print("Something went wrong, maybe.")
+    finally:
+        return (file_count, total_size, extensions)  # Unstructured return value
