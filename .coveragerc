@@ -6,8 +6,7 @@ branch = True
 [paths]
 source =
     Symbols/
-    /home/runner/work/SonarQubeCourse/SonarQubeCourse/Symbols/
-    /workspaces/SonarQubeCourse/Symbols/
+    */Symbols/
 
 [report]
 exclude_lines =
