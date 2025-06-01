@@ -17,6 +17,10 @@ sudo sysctl -w vm.max_map_count=262144
 sudo sysctl -w fs.file-max=65536
 ```
 
+kubectl rollout restart deployment sonarqube-db deployment/sonarqube -n sonarqube && \
+kubectl rollout status deployment/sonarqube-db -n sonarqube && \
+kubectl rollout status deployment/sonarqube -n sonarqube
+
 ### 🔗 Step 3: Enable Port Forwarding
 ```bash
 # Forward SonarQube service port
@@ -27,7 +31,7 @@ kubectl port-forward svc/sonarqube 9000:9000 -n sonarqube
 1. Click the port forwarding link in your environment
 2. Navigate to the SonarQube web interface
 
-### 🔑 Login Credentials
+### 🔑 Login Credentials ( first time login )
 - Username: `admin`
 - Password: `admin`
 
