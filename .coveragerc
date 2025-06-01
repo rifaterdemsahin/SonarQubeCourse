@@ -1,17 +1,21 @@
 [run]
-source = Symbols
+source =
+    .
 relative_files = True
 branch = True
+omit =
+    *test*.py
 
 [paths]
-source = .
+source =
+    .
 
 [report]
 exclude_lines =
     pragma: no cover
     def __repr__
     raise NotImplementedError
-    if __name__ == .__main__.:
+    if __name__ == "__main__":
     pass
     raise ImportError
 
