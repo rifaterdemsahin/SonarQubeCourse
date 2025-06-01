@@ -1,6 +1,10 @@
 import os
 import sys
 from datetime import datetime
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init()
 
 # Global variables (tech debt: should avoid globals)
 # Tech debt: should avoid globals
@@ -32,8 +36,11 @@ def list_files(project_path=None):
                 if os.path.isfile(file_path):
                     size = os.path.getsize(file_path)
                     
-                    # Long line that's hard to read (tech debt: formatting)
-                    print(f"{file_path} | Size: {size} bytes | Modified: {datetime.fromtimestamp(os.path.getmtime(file_path)).strftime('%Y-%m-%d %H:%M:%S')}")
+                    # Colorful output for file information
+                    modified_time = datetime.fromtimestamp(os.path.getmtime(file_path)).strftime('%Y-%m-%d %H:%M:%S')
+                    print(f"{Fore.CYAN}{file_path}{Style.RESET_ALL} | "
+                          f"Size: {Fore.GREEN}{size} bytes{Style.RESET_ALL} | "
+                          f"Modified: {Fore.YELLOW}{modified_time}{Style.RESET_ALL}")
                     
                     stats['file_count'] += 1
                     stats['total_size'] += size
@@ -47,14 +54,14 @@ def list_files(project_path=None):
                             stats['extensions'][ext] = 1
     
     ## Printing mixed with business logic (tech debt: separation of concerns)
-    print("\n--- Summary ---")
-    print(f"Total files: {stats['file_count']}")
-    print(f"Total size: {stats['total_size']} bytes")
-    print("File types found:")
+    print(f"\n{Fore.BLUE}{Style.BRIGHT}--- Summary ---{Style.RESET_ALL}")
+    print(f"{Fore.WHITE}{Style.BRIGHT}Total files:{Style.RESET_ALL} {Fore.GREEN}{stats['file_count']}{Style.RESET_ALL}")
+    print(f"{Fore.WHITE}{Style.BRIGHT}Total size:{Style.RESET_ALL} {Fore.GREEN}{stats['total_size']} bytes{Style.RESET_ALL}")
+    print(f"{Fore.WHITE}{Style.BRIGHT}File types found:{Style.RESET_ALL}")
     
     ## Inefficient sorting (tech debt: could be done better)
     for ext in stats['extensions']:
-        print(f"  .{ext}: {stats['extensions'][ext]} files")
+        print(f"  {Fore.CYAN}.{ext}:{Style.RESET_ALL} {Fore.GREEN}{stats['extensions'][ext]} files{Style.RESET_ALL}")
         
     return stats
 
@@ -63,3 +70,5 @@ if __name__ == "__main__":
     print("Listing all files in project...")
     list_files()
     print("Done!")
+    
+    
