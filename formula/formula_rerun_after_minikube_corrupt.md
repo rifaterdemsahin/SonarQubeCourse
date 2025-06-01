@@ -16,7 +16,7 @@ This guide provides steps to restore SonarQube after Minikube corruption.
 
 ```bash
 minikube delete --all
-minikube start --driver=docker --memory=9096 --cpus=4 --kubernetes-version=v1.27.3
+minikube start --driver=docker --memory=16096 --cpus=4 --kubernetes-version=v1.27.3
 minikube addons enable storage-provisioner
 ```
 
