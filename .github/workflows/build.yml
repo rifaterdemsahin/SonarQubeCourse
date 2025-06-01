@@ -2,6 +2,10 @@ name: Build and SonarQube Analysis
 on:
   push:
     branches: [main]
+
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build and analyze
