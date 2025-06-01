@@ -604,3 +604,281 @@ Additional Notes
 The global variables comment (# Global variables (tech debt: should avoid globals)) suggests a script or configuration issue unrelated to the Kubernetes setup. If this is part of a larger script, ensure variables are properly scoped to avoid side effects.
 The HTTPS warning for OAuth can be ignored unless you plan to enable OAuth authentication, in which case configure a secure server base URL in SonarQube.
 If you need help with specific steps (e.g., editing YAML files, debugging logs), please provide more details or the relevant configuration files.
+
+---
+
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse (main) $ minikube stop && \
+> minikube config set memory 8192 && \
+> minikube config set cpus 4 && \
+> minikube start
+✋  Stopping node "minikube"  ...
+🛑  Powering off "minikube" via SSH ...
+🛑  1 node stopped.
+❗  These changes will take effect upon a minikube delete and then a minikube start
+❗  These changes will take effect upon a minikube delete and then a minikube start
+😄  minikube v1.35.0 on Ubuntu 20.04 (docker/amd64)
+🆕  Kubernetes 1.32.0 is now available. If you would like to upgrade, specify: --kubernetes-version=v1.32.0
+✨  Using the docker driver based on existing profile
+👍  Starting "minikube" primary control-plane node in "minikube" cluster
+🚜  Pulling base image v0.0.46 ...
+🔄  Restarting existing docker container for "minikube" ...
+🐳  Preparing Kubernetes v1.27.3 on Docker 27.4.1 ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+
+❗  /usr/local/bin/kubectl is version 1.32.3, which may have incompatibilities with Kubernetes 1.27.3.
+    ▪ Want kubectl v1.27.3? Try 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse (main) $ minikube config view
+- cpus: 4
+- memory: 8192
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse (main) $ cd /workspaces/SonarQubeCourse/Symbols && \
+> kubectl apply -f deployment_postgresql.yaml -f deployment_server.yaml -n sonarqube
+deployment.apps/sonarqube-db configured
+service/sonarqube-db unchanged
+deployment.apps/sonarqube configured
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse/Symbols (main) $ kubectl get pods -n sonarqube
+NAME                            READY   STATUS    RESTARTS      AGE
+sonarqube-559f59c976-g97ns      0/1     Running   0             39s
+sonarqube-55b9ff9c79-nkrxh      0/1     Running   6 (67s ago)   68m
+sonarqube-db-6998b5b976-hrq9p   1/1     Running   0             39s
+@rifaterdemsahin ➜ /workspaces/SonarQubeCourse/Symbols (main) $ kubectl logs -f deployment/sonarqube -n sonarqube
+Found 2 pods, using pod/sonarqube-55b9ff9c79-nkrxh
+2025.06.01 17:06:34 INFO  app[][o.s.a.AppFileSystem] Cleaning or creating temp directory /opt/sonarqube/temp
+2025.06.01 17:06:34 INFO  app[][o.s.a.es.EsSettings] Elasticsearch listening on [HTTP: 127.0.0.1:9001, TCP: 127.0.0.1:34887]
+2025.06.01 17:06:34 INFO  app[][o.s.a.ProcessLauncherImpl] Launch process[ELASTICSEARCH] from [/opt/sonarqube/elasticsearch]: /opt/sonarqube/elasticsearch/bin/elasticsearch
+2025.06.01 17:06:34 INFO  app[][o.s.a.SchedulerImpl] Waiting for Elasticsearch to be up and running
+2025.06.01 17:06:36 INFO  es[][o.e.n.Node] version[7.17.15], pid[26], build[default/tar/0b8ecfb4378335f4689c4223d1f1115f16bef3ba/2023-11-10T22:03:46.987399016Z], OS[Linux/6.8.0-1027-azure/amd64], JVM[Eclipse Adoptium/OpenJDK 64-Bit Server VM/17.0.15/17.0.15+6]
+2025.06.01 17:06:36 INFO  es[][o.e.n.Node] JVM home [/opt/java/openjdk]
+2025.06.01 17:06:36 INFO  es[][o.e.n.Node] JVM arguments [-XX:+UseG1GC, -Djava.io.tmpdir=/opt/sonarqube/temp, -XX:ErrorFile=/opt/sonarqube/logs/es_hs_err_pid%p.log, -Des.networkaddress.cache.ttl=60, -Des.networkaddress.cache.negative.ttl=10, -XX:+AlwaysPreTouch, -Xss1m, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djna.nosys=true, -Djna.tmpdir=/opt/sonarqube/temp, -XX:-OmitStackTraceInFastThrow, -Dio.netty.noUnsafe=true, -Dio.netty.noKeySetOptimization=true, -Dio.netty.recycler.maxCapacityPerThread=0, -Dio.netty.allocator.numDirectArenas=0, -Dlog4j.shutdownHookEnabled=false, -Dlog4j2.disable.jmx=true, -Dlog4j2.formatMsgNoLookups=true, -Djava.locale.providers=COMPAT, -Dcom.redhat.fips=false, -Des.enforce.bootstrap.checks=true, -Xmx512m, -Xms512m, -XX:MaxDirectMemorySize=256m, -XX:+HeapDumpOnOutOfMemoryError, -Des.path.home=/opt/sonarqube/elasticsearch, -Des.path.conf=/opt/sonarqube/temp/conf/es, -Des.distribution.flavor=default, -Des.distribution.type=tar, -Des.bundled_jdk=false]
+2025.06.01 17:06:36 INFO  es[][o.e.p.PluginsService] loaded module [analysis-common]
+2025.06.01 17:06:36 INFO  es[][o.e.p.PluginsService] loaded module [lang-painless]
+2025.06.01 17:06:36 INFO  es[][o.e.p.PluginsService] loaded module [parent-join]
+2025.06.01 17:06:36 INFO  es[][o.e.p.PluginsService] loaded module [reindex]
+2025.06.01 17:06:36 INFO  es[][o.e.p.PluginsService] loaded module [transport-netty4]
+2025.06.01 17:06:36 INFO  es[][o.e.p.PluginsService] no plugins loaded
+2025.06.01 17:06:36 INFO  es[][o.e.e.NodeEnvironment] using [1] data paths, mounts [[/ (overlay)]], net usable_space [8.2gb], net total_space [31.3gb], types [overlay]
+2025.06.01 17:06:36 INFO  es[][o.e.e.NodeEnvironment] heap size [512mb], compressed ordinary object pointers [true]
+2025.06.01 17:06:36 INFO  es[][o.e.n.Node] node name [sonarqube], node ID [5L66RSKzSNSIgAUyY5x3Qw], cluster name [sonarqube], roles [data_frozen, master, remote_cluster_client, data, data_content, data_hot, data_warm, data_cold, ingest]
+2025.06.01 17:06:40 INFO  es[][o.e.t.NettyAllocator] creating NettyAllocator with the following configs: [name=unpooled, suggested_max_allocation_size=256kb, factors={es.unsafe.use_unpooled_allocator=null, g1gc_enabled=true, g1gc_region_size=1mb, heap_size=512mb}]
+2025.06.01 17:06:40 INFO  es[][o.e.i.r.RecoverySettings] using rate limit [40mb] with [default=40mb, read=0b, write=0b, max=0b]
+2025.06.01 17:06:40 INFO  es[][o.e.d.DiscoveryModule] using discovery type [zen] and seed hosts providers [settings]
+2025.06.01 17:06:40 INFO  es[][o.e.g.DanglingIndicesState] gateway.auto_import_dangling_indices is disabled, dangling indices will not be automatically detected or imported and must be managed manually
+2025.06.01 17:06:40 INFO  es[][o.e.n.Node] initialized
+2025.06.01 17:06:40 INFO  es[][o.e.n.Node] starting ...
+2025.06.01 17:06:40 INFO  es[][o.e.t.TransportService] publish_address {127.0.0.1:34887}, bound_addresses {127.0.0.1:34887}
+2025.06.01 17:06:40 INFO  es[][o.e.b.BootstrapChecks] explicitly enforcing bootstrap checks
+2025.06.01 17:06:40 INFO  es[][o.e.c.c.Coordinator] setting initial configuration to VotingConfiguration{5L66RSKzSNSIgAUyY5x3Qw}
+2025.06.01 17:06:40 INFO  es[][o.e.c.s.MasterService] elected-as-master ([1] nodes joined)[{sonarqube}{5L66RSKzSNSIgAUyY5x3Qw}{h-GssXckRSOEGowmDNMyIA}{127.0.0.1}{127.0.0.1:34887}{cdfhimrsw} elect leader, _BECOME_MASTER_TASK_, _FINISH_ELECTION_], term: 1, version: 1, delta: master node changed {previous [], current [{sonarqube}{5L66RSKzSNSIgAUyY5x3Qw}{h-GssXckRSOEGowmDNMyIA}{127.0.0.1}{127.0.0.1:34887}{cdfhimrsw}]}
+2025.06.01 17:06:41 INFO  es[][o.e.c.c.CoordinationState] cluster UUID set to [XX5HcNtITEW3s6Kir_wGrw]
+2025.06.01 17:06:41 INFO  es[][o.e.c.s.ClusterApplierService] master node changed {previous [], current [{sonarqube}{5L66RSKzSNSIgAUyY5x3Qw}{h-GssXckRSOEGowmDNMyIA}{127.0.0.1}{127.0.0.1:34887}{cdfhimrsw}]}, term: 1, version: 1, reason: Publication{term=1, version=1}
+2025.06.01 17:06:41 INFO  es[][o.e.h.AbstractHttpServerTransport] publish_address {127.0.0.1:9001}, bound_addresses {127.0.0.1:9001}
+2025.06.01 17:06:41 INFO  es[][o.e.n.Node] started
+2025.06.01 17:06:41 INFO  es[][o.e.g.GatewayService] recovered [0] indices into cluster_state
+2025.06.01 17:06:41 INFO  app[][o.s.a.SchedulerImpl] Process[es] is up
+2025.06.01 17:06:41 INFO  app[][o.s.a.ProcessLauncherImpl] Launch process[WEB_SERVER] from [/opt/sonarqube]: /opt/java/openjdk/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp -XX:-OmitStackTraceInFastThrow --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED --add-exports=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.management/sun.management=ALL-UNNAMED --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED -Dcom.redhat.fips=false -Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.nonProxyHosts=localhost|127.*|[::1] -cp ./lib/sonar-application-9.9.8.100196.jar:/opt/sonarqube/lib/jdbc/postgresql/postgresql-42.5.1.jar org.sonar.server.app.WebServer /opt/sonarqube/temp/sq-process18117477029576679005properties
+WARNING: A terminally deprecated method in java.lang.System has been called
+WARNING: System::setSecurityManager has been called by org.sonar.process.PluginSecurityManager (file:/opt/sonarqube/lib/sonar-application-9.9.8.100196.jar)
+WARNING: Please consider reporting this to the maintainers of org.sonar.process.PluginSecurityManager
+WARNING: System::setSecurityManager will be removed in a future release
+2025.06.01 17:06:41 INFO  web[][o.s.p.ProcessEntryPoint] Starting Web Server
+2025.06.01 17:06:42 INFO  web[][o.s.s.p.LogServerVersion] SonarQube Server / 9.9.8.100196 / a6b73d92af974da59414bc4a00dde2882016ea70
+2025.06.01 17:06:42 INFO  web[][o.sonar.db.Database] Create JDBC data source for jdbc:postgresql://sonarqube-db:5432/sonar
+2025.06.01 17:06:42 INFO  web[][c.z.h.HikariDataSource] HikariPool-1 - Starting...
+2025.06.01 17:06:42 INFO  web[][c.z.h.p.HikariPool] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@59942b48
+2025.06.01 17:06:42 INFO  web[][c.z.h.HikariDataSource] HikariPool-1 - Start completed.
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerFileSystemImpl] SonarQube home: /opt/sonarqube
+2025.06.01 17:06:44 INFO  web[][o.s.s.u.SystemPasscodeImpl] System authentication by passcode is disabled
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy C# Code Quality and Security / 8.51.0.59060 / e14c642f118958f22fd08841dc42f9aae480366a
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Configuration detection fot Code Quality and Security / 1.2.0.267 / 4f37ba9ffb37a96d5883e52ad392ed32c5c6eaab
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Flex Code Quality and Security / 2.8.0.3166 / 01f66bdddc678966c81a9064ed139156a6a89c97
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Go Code Quality and Security / 1.11.0.3905 / e1f28bc000e04ca01881e84218d01d464a17a36f
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy HTML Code Quality and Security / 3.7.1.3306 / d720acc6860c6d8b69ec4d17570a398a1e216da1
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy IaC Code Quality and Security / 1.11.0.2847 / 6892bd3a7320b3c110717acfdb18c4c7451069fd
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy JaCoCo / 1.3.0.1538 / 74a7798c7cea687c72ed9df40c93eb7ea2a58c49
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Java Code Quality and Security / 7.16.0.30901 / 4b1436558dfd5fc00c8d9aae8bb0364ba122c73e
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy JavaScript/TypeScript/CSS Code Quality and Security / 9.13.0.20537 / 68ff7657415044b86033814795ed95fc1f1558f1
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Kotlin Code Quality and Security / 2.12.0.1956 / a6df1ae252bd62d63f8673c28f87ad14258a7904
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy PHP Code Quality and Security / 3.27.1.9352 / 3ddc5a03e1a7e3729d41e7c1a30a37d5715958c7
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Python Code Quality and Security / 3.24.1.11916 / cc8f4fa745eb33d31c3869bdfdfd45514e67c1fe
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Ruby Code Quality and Security / 1.11.0.3905 / e1f28bc000e04ca01881e84218d01d464a17a36f
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Scala Code Quality and Security / 1.11.0.3905 / e1f28bc000e04ca01881e84218d01d464a17a36f
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy Text Code Quality and Security / 2.0.2.1090 / 7eb026363b98f5f98b43c603772b5177869c2c6a
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy VB.NET Code Quality and Security / 8.51.0.59060 / e14c642f118958f22fd08841dc42f9aae480366a
+2025.06.01 17:06:44 INFO  web[][o.s.s.p.ServerPluginManager] Deploy XML Code Quality and Security / 2.7.0.3820 / 656bccc1910d50c8984536bd2dfd917066b858e6
+2025.06.01 17:06:45 INFO  web[][o.s.s.p.d.m.c.PostgresCharsetHandler] Verify that database charset supports UTF8
+2025.06.01 17:06:46 INFO  web[][o.s.s.e.EsClientProvider] Connected to local Elasticsearch: [http://localhost:9001]
+2025.06.01 17:06:46 WARN  web[][o.s.a.s.w.WebService$Action] Description is not set on action api/monitoring/metrics
+2025.06.01 17:06:46 WARN  web[][o.s.a.s.w.WebService$Action] Since is not set on action api/monitoring/metrics
+2025.06.01 17:06:46 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action api/monitoring/metrics
+2025.06.01 17:06:46 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action api/system/liveness
+2025.06.01 17:06:46 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.platform.web.WebServiceFilter@5600a5da [pattern=UrlPattern{inclusions=[/api/system/migrate_db.*, ...], exclusions=[/api/components/update_key, ...]}]
+2025.06.01 17:06:47 INFO  web[][o.s.s.p.DetectPluginChange] Detect plugin changes
+2025.06.01 17:06:47 INFO  web[][o.s.s.a.EmbeddedTomcat] HTTP connector enabled on port 9000
+2025.06.01 17:06:47 INFO  web[][o.s.s.p.DetectPluginChange] No plugin change detected
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@59942b48 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2901b392 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7f260e78 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@38b6128a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@64acc15c (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@40956378 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@f0ff0dc (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7a581f5 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@581067c (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:49 WARN  web[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@6ee43b17 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:06:50 INFO  web[][o.s.s.e.IndexCreator] Create index [metadatas]
+2025.06.01 17:06:51 INFO  es[][o.e.c.m.MetadataCreateIndexService] [metadatas] creating index, cause [api], templates [], shards [1]/[0]
+2025.06.01 17:06:51 INFO  es[][o.e.c.r.a.AllocationService] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[metadatas][0]]]).
+2025.06.01 17:06:51 INFO  web[][o.s.s.e.IndexCreator] Create type metadatas/metadata
+2025.06.01 17:06:52 INFO  es[][o.e.c.m.MetadataMappingService] [metadatas/Z4SpnJ7uTPWuuFqC_f79wg] create_mapping [metadata]
+2025.06.01 17:06:52 INFO  web[][o.s.s.e.IndexCreator] Create index [components]
+2025.06.01 17:06:52 INFO  es[][o.e.c.m.MetadataCreateIndexService] [components] creating index, cause [api], templates [], shards [5]/[0]
+2025.06.01 17:06:52 INFO  es[][o.e.c.r.a.AllocationService] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[components][4]]]).
+2025.06.01 17:06:52 INFO  web[][o.s.s.e.IndexCreator] Create type components/auth
+2025.06.01 17:06:53 INFO  es[][o.e.c.m.MetadataMappingService] [components/6-o-tH4TQ6i2id-UmCmebw] create_mapping [auth]
+2025.06.01 17:06:53 INFO  web[][o.s.s.e.IndexCreator] Create index [projectmeasures]
+2025.06.01 17:06:53 INFO  es[][o.e.c.m.MetadataCreateIndexService] [projectmeasures] creating index, cause [api], templates [], shards [5]/[0]
+2025.06.01 17:06:53 INFO  es[][o.e.c.r.a.AllocationService] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[projectmeasures][4]]]).
+2025.06.01 17:06:53 INFO  web[][o.s.s.e.IndexCreator] Create type projectmeasures/auth
+2025.06.01 17:06:53 INFO  es[][o.e.c.m.MetadataMappingService] [projectmeasures/1pkRJGHdT12-3iWLRgsfxw] create_mapping [auth]
+2025.06.01 17:06:53 INFO  web[][o.s.s.e.IndexCreator] Create index [rules]
+2025.06.01 17:06:53 INFO  es[][o.e.c.m.MetadataCreateIndexService] [rules] creating index, cause [api], templates [], shards [2]/[0]
+2025.06.01 17:06:53 INFO  es[][o.e.c.r.a.AllocationService] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[rules][1]]]).
+2025.06.01 17:06:53 INFO  web[][o.s.s.e.IndexCreator] Create type rules/rule
+2025.06.01 17:06:54 INFO  es[][o.e.c.m.MetadataMappingService] [rules/BMM1u7BtTbKjRxfEOLwZ5A] create_mapping [rule]
+2025.06.01 17:06:54 INFO  web[][o.s.s.e.IndexCreator] Create index [issues]
+2025.06.01 17:06:54 INFO  es[][o.e.c.m.MetadataCreateIndexService] [issues] creating index, cause [api], templates [], shards [5]/[0]
+2025.06.01 17:06:54 INFO  es[][o.e.c.r.a.AllocationService] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[issues][4]]]).
+2025.06.01 17:06:54 INFO  web[][o.s.s.e.IndexCreator] Create type issues/auth
+2025.06.01 17:06:54 INFO  es[][o.e.c.m.MetadataMappingService] [issues/CtTZYvyJQXyREVoIKtDMOg] create_mapping [auth]
+2025.06.01 17:06:54 INFO  web[][o.s.s.e.IndexCreator] Create index [users]
+2025.06.01 17:06:54 INFO  es[][o.e.c.m.MetadataCreateIndexService] [users] creating index, cause [api], templates [], shards [1]/[0]
+2025.06.01 17:06:55 INFO  es[][o.e.c.r.a.AllocationService] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[users][0]]]).
+2025.06.01 17:06:55 INFO  web[][o.s.s.e.IndexCreator] Create type users/user
+2025.06.01 17:06:55 INFO  es[][o.e.c.m.MetadataMappingService] [users/OA5mezrMQwejubzxOCbhVg] create_mapping [user]
+2025.06.01 17:06:55 INFO  web[][o.s.s.e.IndexCreator] Create index [views]
+2025.06.01 17:06:55 INFO  es[][o.e.c.m.MetadataCreateIndexService] [views] creating index, cause [api], templates [], shards [5]/[0]
+2025.06.01 17:06:55 INFO  es[][o.e.c.r.a.AllocationService] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[views][4]]]).
+2025.06.01 17:06:55 INFO  web[][o.s.s.e.IndexCreator] Create type views/view
+2025.06.01 17:06:55 INFO  es[][o.e.c.m.MetadataMappingService] [views/AAGfcDbBTq6WWWQMpzllLg] create_mapping [view]
+2025.06.01 17:06:56 INFO  web[][o.s.s.s.LogServerId] Server ID: 9B767396-AZcsOBRKEajcHBulmcR7
+2025.06.01 17:06:56 WARN  web[][o.s.s.a.LogOAuthWarning] For security reasons, OAuth authentication should use HTTPS. You should set the property 'Administration > Configuration > Server base URL' to a HTTPS URL.
+2025.06.01 17:06:56 INFO  web[][o.s.s.p.UpdateCenterClient] Update center: https://update.sonarsource.org/update-center.properties
+2025.06.01 17:06:58 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action saml/validation_init
+2025.06.01 17:06:58 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action api/system/liveness
+2025.06.01 17:06:58 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action api/plugins/download
+2025.06.01 17:06:58 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action api/analysis_cache/get
+2025.06.01 17:06:58 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action api/alm_integrations/check_pat
+2025.06.01 17:06:58 WARN  web[][o.s.a.s.w.WebService$Action] The response example is not set on action api/push/sonarlint_events
+2025.06.01 17:06:58 INFO  web[][o.s.s.n.NotificationDaemon] Notification service started (delay 60 sec.)
+2025.06.01 17:06:58 INFO  web[][o.s.s.a.p.ExpiredSessionsCleaner] Purge of expired session tokens has removed 0 elements
+2025.06.01 17:06:58 INFO  web[][o.s.s.a.p.ExpiredSessionsCleaner] Purge of expired SAML message ids has removed 0 elements
+2025.06.01 17:06:58 INFO  web[][o.s.s.t.TelemetryDaemon] Sharing of SonarQube statistics is enabled.
+2025.06.01 17:06:59 INFO  web[][o.s.s.s.GeneratePluginIndex] Generate scanner plugin index
+2025.06.01 17:06:59 INFO  web[][o.s.s.s.RegisterPermissionTemplates] Register permission templates
+2025.06.01 17:06:59 INFO  web[][o.s.s.s.RenameDeprecatedPropertyKeys] Rename deprecated property keys
+2025.06.01 17:06:59 INFO  web[][o.s.s.s.RegisterPlugins] Register plugins
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.platform.web.SonarLintConnectionFilter@b51b8aa [pattern=UrlPattern{inclusions=[/api/*], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.platform.web.WebServiceFilter@1c289ef5 [pattern=UrlPattern{inclusions=[/api/issues/delete_comment.*, ...], exclusions=[/api/authentication/login.*, ...]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.platform.web.WebServiceReroutingFilter@63c1ad20 [pattern=UrlPattern{inclusions=[/api/components/bulk_update_key, ...], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.DefaultAdminCredentialsVerifierFilter@2141f291 [pattern=UrlPattern{inclusions=[/*], exclusions=[*.css, ...]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.InitFilter@27d39afb [pattern=UrlPattern{inclusions=[/sessions/init/*], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.SamlValidationRedirectionFilter@7f5467c2 [pattern=UrlPattern{inclusions=[/oauth2/callback/saml], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.OAuth2CallbackFilter@11927da5 [pattern=UrlPattern{inclusions=[/oauth2/callback/*], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.ResetPasswordFilter@3fe9c07c [pattern=UrlPattern{inclusions=[/*], exclusions=[*.css, ...]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.ws.LoginAction@20eb646d [pattern=UrlPattern{inclusions=[/api/authentication/login], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.ws.LogoutAction@3aeae8a2 [pattern=UrlPattern{inclusions=[/api/authentication/logout], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.authentication.ws.ValidateAction@2cfc39c0 [pattern=UrlPattern{inclusions=[/api/authentication/validate], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.saml.ws.ValidationInitAction@3ce21e2 [pattern=UrlPattern{inclusions=[/saml/validation_init], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.saml.ws.ValidationAction@3189af60 [pattern=UrlPattern{inclusions=[/saml/validation], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.user.ws.ChangePasswordAction@4d68138 [pattern=UrlPattern{inclusions=[/api/users/change_password], exclusions=[]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.p.w.MasterServletFilter] Initializing servlet filter org.sonar.server.plugins.PluginsRiskConsentFilter@58e09c17 [pattern=UrlPattern{inclusions=[/*], exclusions=[*.css, ...]}]
+2025.06.01 17:06:59 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [rules/rule/activeRule]...
+2025.06.01 17:07:01 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [rules/rule/activeRule] done | time=2325ms
+2025.06.01 17:07:01 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [rules/rule]...
+2025.06.01 17:07:16 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [rules/rule] done | time=15125ms
+2025.06.01 17:07:16 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [users/user]...
+2025.06.01 17:07:16 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [30s] to [-1]
+2025.06.01 17:07:16 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [30s] to [-1]
+2025.06.01 17:07:17 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [-1] to [30s]
+2025.06.01 17:07:17 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [-1] to [30s]
+2025.06.01 17:07:17 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [users/user] done | time=310ms
+2025.06.01 17:07:17 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [projectmeasures/auth/projectmeasure]...
+2025.06.01 17:07:17 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [projectmeasures/auth/projectmeasure] done | time=484ms
+2025.06.01 17:07:17 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [components/auth/component]...
+2025.06.01 17:07:17 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [components/auth/component] done | time=300ms
+2025.06.01 17:07:17 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [views/view]...
+2025.06.01 17:07:18 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [30s] to [-1]
+2025.06.01 17:07:18 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [30s] to [-1]
+2025.06.01 17:07:18 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [-1] to [30s]
+2025.06.01 17:07:18 INFO  es[][o.e.c.s.IndexScopedSettings] updating [index.refresh_interval] from [-1] to [30s]
+2025.06.01 17:07:18 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of type [views/view] done | time=330ms
+2025.06.01 17:07:18 INFO  web[][o.s.s.e.IndexerStartupTask] Trigger asynchronous indexing of type [issues/auth/issue]...
+2025.06.01 17:07:18 INFO  web[][o.s.s.i.i.AsyncIssueIndexingImpl] 0 pending indexation task found to be deleted...
+2025.06.01 17:07:18 INFO  web[][o.s.s.i.i.AsyncIssueIndexingImpl] 0 completed indexation task found to be deleted...
+2025.06.01 17:07:18 INFO  web[][o.s.s.i.i.AsyncIssueIndexingImpl] Indexation task deletion complete.
+2025.06.01 17:07:18 INFO  web[][o.s.s.i.i.AsyncIssueIndexingImpl] Deleting tasks characteristics...
+2025.06.01 17:07:18 INFO  web[][o.s.s.i.i.AsyncIssueIndexingImpl] Tasks characteristics deletion complete.
+2025.06.01 17:07:18 INFO  web[][o.s.s.i.i.AsyncIssueIndexingImpl] 1 branch found in need of issue sync.
+2025.06.01 17:07:18 INFO  web[][o.s.s.i.i.AsyncIssueIndexingImpl] 1 projects found in need of issue sync.
+2025.06.01 17:07:18 INFO  web[][o.s.s.e.IndexerStartupTask] Trigger asynchronous indexing of type [issues/auth/issue] done | time=212ms
+2025.06.01 17:07:18 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of types [components/auth],[projectmeasures/auth],[issues/auth]...
+2025.06.01 17:07:19 INFO  web[][o.s.s.e.IndexerStartupTask] Indexing of types [components/auth],[projectmeasures/auth],[issues/auth] done | time=833ms
+2025.06.01 17:07:19 INFO  web[][o.s.s.q.ProjectsInWarningDaemon] Counting number of projects in warning is not started as there are no projects in this situation.
+2025.06.01 17:07:19 INFO  web[][o.s.s.p.p.PlatformLevelStartup] Running Community Edition
+2025.06.01 17:07:19 INFO  app[][o.s.a.SchedulerImpl] Process[web] is up
+2025.06.01 17:07:19 INFO  app[][o.s.a.ProcessLauncherImpl] Launch process[COMPUTE_ENGINE] from [/opt/sonarqube]: /opt/java/openjdk/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp -XX:-OmitStackTraceInFastThrow --add-opens=java.base/java.util=ALL-UNNAMED --add-exports=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.management/sun.management=ALL-UNNAMED --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED -Dcom.redhat.fips=false -Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.nonProxyHosts=localhost|127.*|[::1] -cp ./lib/sonar-application-9.9.8.100196.jar:/opt/sonarqube/lib/jdbc/postgresql/postgresql-42.5.1.jar org.sonar.ce.app.CeServer /opt/sonarqube/temp/sq-process8671219604874976284properties
+2025.06.01 17:07:19 INFO  web[][o.s.s.p.Platform] Web Server is operational
+WARNING: A terminally deprecated method in java.lang.System has been called
+WARNING: System::setSecurityManager has been called by org.sonar.process.PluginSecurityManager (file:/opt/sonarqube/lib/sonar-application-9.9.8.100196.jar)
+WARNING: Please consider reporting this to the maintainers of org.sonar.process.PluginSecurityManager
+WARNING: System::setSecurityManager will be removed in a future release
+2025.06.01 17:07:20 INFO  ce[][o.s.p.ProcessEntryPoint] Starting Compute Engine
+2025.06.01 17:07:20 INFO  ce[][o.s.ce.app.CeServer] Compute Engine starting up...
+2025.06.01 17:07:21 INFO  ce[][o.sonar.db.Database] Create JDBC data source for jdbc:postgresql://sonarqube-db:5432/sonar
+2025.06.01 17:07:21 INFO  ce[][c.z.h.HikariDataSource] HikariPool-1 - Starting...
+2025.06.01 17:07:21 INFO  ce[][c.z.h.p.HikariPool] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@44e5b507
+2025.06.01 17:07:21 INFO  ce[][c.z.h.HikariDataSource] HikariPool-1 - Start completed.
+2025.06.01 17:07:23 INFO  ce[][o.s.s.p.ServerFileSystemImpl] SonarQube home: /opt/sonarqube
+2025.06.01 17:07:23 INFO  ce[][o.s.c.c.CePluginRepository] Load plugins
+2025.06.01 17:07:26 INFO  ce[][o.s.c.c.ComputeEngineContainerImpl] Running Community edition
+2025.06.01 17:07:26 INFO  ce[][o.s.ce.app.CeServer] Compute Engine is started
+2025.06.01 17:07:26 INFO  app[][o.s.a.SchedulerImpl] Process[ce] is up
+2025.06.01 17:07:26 INFO  app[][o.s.a.SchedulerImpl] SonarQube is operational
+2025.06.01 17:07:28 INFO  ce[][o.s.c.t.CeWorkerImpl] Execute task | project=rifaterdemsahin_SonarQubeCourse_AZcsPUc8EajcHBulmmLO | type=ISSUE_SYNC | branch=main | branchType=BRANCH | id=AZcsdkbYxwYuxBk-wc3O
+2025.06.01 17:07:28 INFO  ce[AZcsdkbYxwYuxBk-wc3O][o.s.c.t.s.ComputationStepExecutor] Ignore orphan component | status=SUCCESS | time=10ms
+2025.06.01 17:07:28 INFO  ce[AZcsdkbYxwYuxBk-wc3O][o.s.s.e.EsClientProvider] Connected to local Elasticsearch: [http://localhost:9001]
+2025.06.01 17:07:29 INFO  ce[AZcsdkbYxwYuxBk-wc3O][o.s.c.t.p.t.IndexIssuesStep] indexing issues of branch AZcsPUc_EajcHBulmmLP
+2025.06.01 17:07:30 INFO  ce[AZcsdkbYxwYuxBk-wc3O][o.s.c.t.s.ComputationStepExecutor] index issues | status=SUCCESS | time=823ms
+2025.06.01 17:07:30 INFO  ce[AZcsdkbYxwYuxBk-wc3O][o.s.c.t.CeWorkerImpl] Executed task | project=rifaterdemsahin_SonarQubeCourse_AZcsPUc8EajcHBulmmLO | type=ISSUE_SYNC | branch=main | branchType=BRANCH | id=AZcsdkbYxwYuxBk-wc3O | status=SUCCESS | time=1786ms
+2025.06.01 17:07:40 INFO  ce[][o.s.c.t.CeWorkerImpl] Execute task | project=rifaterdemsahin_SonarQubeCourse_AZcsPUc8EajcHBulmmLO | type=ISSUE_SYNC | branch=main | branchType=BRANCH | id=AZcsdpvaeE3o-FPpWMQS
+2025.06.01 17:07:40 INFO  ce[AZcsdpvaeE3o-FPpWMQS][o.s.c.t.s.ComputationStepExecutor] Ignore orphan component | status=SUCCESS | time=10ms
+2025.06.01 17:07:40 INFO  ce[AZcsdpvaeE3o-FPpWMQS][o.s.c.t.p.t.IndexIssuesStep] indexing issues of branch AZcsPUc_EajcHBulmmLP
+2025.06.01 17:07:40 INFO  ce[AZcsdpvaeE3o-FPpWMQS][o.s.c.t.s.ComputationStepExecutor] index issues | status=SUCCESS | time=160ms
+2025.06.01 17:07:40 INFO  ce[AZcsdpvaeE3o-FPpWMQS][o.s.c.t.CeWorkerImpl] Executed task | project=rifaterdemsahin_SonarQubeCourse_AZcsPUc8EajcHBulmmLO | type=ISSUE_SYNC | branch=main | branchType=BRANCH | id=AZcsdpvaeE3o-FPpWMQS | status=SUCCESS | time=211ms
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@63342693 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@1fd796c9 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7df9c417 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@3f3b6585 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@77db6966 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5499c88a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@67737772 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@3803154 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2f3cf81b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@35fbb8ee (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@494f91c4 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:49 WARN  web[AZcsdsG0/NXRAZ7PAAAA][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4b470328 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@44e5b507 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@1bd75c60 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4751287b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@3ceda9ee (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@f18ea5d (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2e0d9382 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@60d164c8 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@31a213e5 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@79a04d8e (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025.06.01 17:07:50 WARN  ce[][c.z.h.pool.PoolBase] HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@3bf340bb (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+
+
+----

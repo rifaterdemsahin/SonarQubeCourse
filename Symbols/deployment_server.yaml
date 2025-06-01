@@ -31,6 +31,20 @@ spec:
             secretKeyRef:
               name: sonar-db-credentials
               key: POSTGRES_PASSWORD
+        - name: SONAR_JDBC_MAXACTIVE
+          value: "50"
+        - name: SONAR_JDBC_MAXIDLE
+          value: "5"
+        - name: SONAR_JDBC_MINIDLE
+          value: "2"
+        - name: SONAR_JDBC_MAXWAIT
+          value: "5000"
+        - name: SONAR_JDBC_MAXLIFETIME
+          value: "1800000"
+        - name: SONAR_WEB_JAVAOPTS
+          value: "-Xmx2g -Xms1g -XX:+HeapDumpOnOutOfMemoryError"
+        - name: SONAR_CE_JAVAOPTS
+          value: "-Xmx2g -Xms1g -XX:+HeapDumpOnOutOfMemoryError"
         resources:
           limits:
             cpu: "2"
