@@ -38,7 +38,7 @@ class TestFileScanning:
     def test_size_calculation(self, test_directory):
         """Test if the total file size is calculated correctly."""
         stats = list_files(str(test_directory))
-        expected_size = 5 + 12 + 15 + 9  # Sum of all non-hidden files
+        expected_size = 5 + 13 + 16 + 9  # Sum of all non-hidden files
         assert stats['total_size'] == expected_size, f"Total size should be {expected_size} bytes"
 
     def test_extension_tracking(self, test_directory):

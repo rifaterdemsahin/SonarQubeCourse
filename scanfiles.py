@@ -81,6 +81,9 @@ def list_files(directory):
     Lists all non-hidden files in a directory and its subdirectories,
     returning statistics about the files.
     """
+    if not os.path.exists(directory):
+        raise FileNotFoundError(f"Directory not found: {directory}")
+        
     stats = {
         'file_count': 0,
         'total_size': 0,
