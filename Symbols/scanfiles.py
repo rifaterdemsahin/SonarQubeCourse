@@ -3,6 +3,7 @@ import sys
 from datetime import datetime
 
 # Global variables (tech debt: should avoid globals)
+# Tech debt: should avoid globals
 file_count = 0
 total_size = 0
 extensions = {}
