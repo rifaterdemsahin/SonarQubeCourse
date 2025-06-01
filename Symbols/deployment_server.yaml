@@ -33,20 +33,24 @@ spec:
               key: POSTGRES_PASSWORD
         resources:
           limits:
-            memory: "4Gi"
             cpu: "2"
+            memory: "6Gi"
           requests:
-            memory: "2Gi"
             cpu: "1"
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 9000
-          initialDelaySeconds: 60
-          periodSeconds: 30
+            memory: "3Gi"
         livenessProbe:
           httpGet:
             path: /
             port: 9000
-          initialDelaySeconds: 120
+          initialDelaySeconds: 180
+          timeoutSeconds: 5
           periodSeconds: 30
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9000
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          periodSeconds: 30
+          failureThreshold: 5
