@@ -50,13 +50,7 @@ def test_extension_tracking(test_directory, capsys):
     assert stats['extensions'].get('py', 0) == 2, "Should find 2 .py files"
 
 def test_hidden_files_ignored(test_directory, capsys):
-    # Reset global variables
-    global file_count, total_size, extensions
-    file_count = 0
-    total_size = 0
-    extensions = {}
-    
-    list_files(str(test_directory))
+    stats = list_files(str(test_directory))
     captured = capsys.readouterr()
     
     # Check that hidden files are not included in output
@@ -71,18 +65,12 @@ def test_empty_directory(tmp_path, capsys):
     original_dir = os.getcwd()
     os.chdir(str(empty_dir))
     
-    # Reset global variables
-    global file_count, total_size, extensions
-    file_count = 0
-    total_size = 0
-    extensions = {}
-    
-    list_files(str(empty_dir))
+    stats = list_files(str(empty_dir))
     
     # Restore original working directory
     os.chdir(original_dir)
     
     # Check that empty directory is handled correctly
-    assert file_count == 0, "Empty directory should have 0 files"
-    assert total_size == 0, "Empty directory should have 0 total size"
-    assert len(extensions) == 0, "Empty directory should have no extensions"
+    assert stats['file_count'] == 0, "Empty directory should have 0 files"
+    assert stats['total_size'] == 0, "Empty directory should have 0 total size"
+    assert len(stats['extensions']) == 0, "Empty directory should have no extensions"
