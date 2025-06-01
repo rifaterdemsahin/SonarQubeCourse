@@ -42,16 +42,16 @@ spec:
         - name: SONAR_JDBC_MAXLIFETIME
           value: "1800000"
         - name: SONAR_WEB_JAVAOPTS
-          value: "-Xmx2g -Xms1g -XX:+HeapDumpOnOutOfMemoryError"
+          value: "-Xmx4g -Xms4g -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200"
         - name: SONAR_CE_JAVAOPTS
-          value: "-Xmx2g -Xms1g -XX:+HeapDumpOnOutOfMemoryError"
+          value: "-Xmx4g -Xms4g -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200"
         resources:
           limits:
             cpu: "4"
-            memory: "10Gi"
+            memory: "16Gi"
           requests:
             cpu: "2"
-            memory: "6Gi"
+            memory: "8Gi"
         livenessProbe:
           httpGet:
             path: /
