@@ -4,10 +4,7 @@ relative_files = True
 branch = True
 
 [paths]
-source =
-    Symbols/
-    /home/runner/work/SonarQubeCourse/SonarQubeCourse/Symbols/
-    /workspaces/SonarQubeCourse/Symbols/
+source = .
 
 [report]
 exclude_lines =
