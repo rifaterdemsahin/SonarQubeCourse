@@ -307,4 +307,6 @@ The HTML content shows "Connecting to the forwarded port..." which indicates the
 
 The error essentially means SonarScanner can't reach your SonarQube server to download the necessary analysis engine files.
 
+Solution : Make the port visibinility public 
+
 ---
