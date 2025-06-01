@@ -39,7 +39,7 @@ def list_files():
                         else:
                             extensions[ext] = 1
     
-    # Printing mixed with business logic (tech debt: separation of concerns)
+    ## Printing mixed with business logic (tech debt: separation of concerns)
     print(f"\n--- Summary ---")
     print(f"Total files: {file_count}")
     print(f"Total size: {total_size} bytes")
