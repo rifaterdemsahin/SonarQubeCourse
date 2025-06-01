@@ -45,7 +45,7 @@ def list_files():
     print(f"Total size: {total_size} bytes")
     print(f"File types found:")
     
-    # Inefficient sorting (tech debt: could be done better)
+    ## Inefficient sorting (tech debt: could be done better)
     for ext in extensions:
         print(f"  .{ext}: {extensions[ext]} files")
 
