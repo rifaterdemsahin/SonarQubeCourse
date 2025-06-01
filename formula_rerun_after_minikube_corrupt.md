@@ -1,15 +1,6 @@
 # 🛠️ SonarQube Recovery Guide: Post-Minikube Corruption
 
-## 📋 Prerequisites - Python Test Libraries
-
-Before proceeding with the recovery, ensure you have the Python test libraries installed:
-
-```bash
-# Install required Python testing packages
-pip install pytest pytest-cov
-```
-
-These packages are essential for running tests and generating coverage reports that SonarQube will analyze.
+This guide provides steps to restore SonarQube after Minikube corruption.
 
 ## 📋 Prerequisites
 
@@ -57,7 +48,16 @@ cd /workspaces/SonarQubeCourse/Symbols
 
 # Apply configurations
 kubectl apply -f pvc.yaml -n sonarqube
-kubectl
+kubectl apply -f deployment_postgresql.yaml -n sonarqube
+kubectl apply -f deployment_server.yaml -f service_sonarqube.yaml -n sonarqube
+
+# Wait for deployments
+kubectl wait --for=condition=ready pod -l app=sonarqube-db -n sonarqube --timeout=120s
+kubectl wait --for=condition=ready pod -l app=sonarqube -n sonarqube --timeout=300s
+```
+
+### 5. Access SonarQube
+
 ```bash
 kubectl port-forward svc/sonarqube 9000:9000 -n sonarqube
 ```

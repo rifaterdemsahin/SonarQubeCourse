@@ -1,20 +1,7 @@
 # 🎯 SonarQube Port Forwarding
 
-## 📋 Prerequisites - Python Test Libraries
-
-Before proceeding, ensure you have the Python test libraries installed:
-
-```bash
-# Install required Python testing packages
-pip install pytest pytest-cov
-```
-
-These packages are essential for running tests and generating coverage reports that SonarQube will analyze.
-
-## 🚀 Getting Started
-
-To access SonarQube locally, follow these steps:
-
+To access SonarQube locally, follow these steps 🚀:
+kubectl get pods -n sonarqube
 ```bash
 # Step 1: Start Minikube with sufficient resources
 minikube start --memory=16096 --cpus=6 --addons=storage-provisioner

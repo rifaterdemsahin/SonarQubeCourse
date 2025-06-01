@@ -1,16 +1,5 @@
 ## Semblance 
 
-### Prerequisites - Python Test Libraries
-
-Before proceeding with any setup, ensure you have the Python test libraries installed:
-
-```bash
-# Install required Python testing packages
-pip install pytest pytest-cov
-```
-
-These packages are essential for running tests and generating coverage reports that SonarQube will analyze.
-
 ### Problems and Solutions in the Project
 
 #### 1. SonarQube Setup Issues
