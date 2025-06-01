@@ -38,6 +38,10 @@ kubectl create secret generic sonar-db-credentials \
 
 **Problem**: Route issues and connection issules
 
+### 5. Test dont exists
+
+Problem : 16:19:01.418 ERROR The folder 'tests' does not exist for 'rifaterdemsahin_SonarQubeCourse_AZcsPUc8EajcHBulmmLO' (base directory = /home/runner/work/SonarQubeCourse/SonarQubeCourse)
+
 
 **Solutions**:
 1. Server Configuration:
@@ -55,9 +59,11 @@ kubectl create secret generic sonar-db-credentials \
    - Verify `sonar.host.url` setting
    - Configure port forwarding correctly
 4. minikube start 
-5. ⚠️ Root Cause
+ ⚠️ Root Cause
 You're likely running this inside GitHub Codespaces, and the SonarScanner is trying to connect to a SonarQube server hosted locally (on localhost or 127.0.0.1) or on an inaccessible port.
 Set accesibility to public 
+
+5. create tests folder 
 
 ### Debug Commands
 ```bash

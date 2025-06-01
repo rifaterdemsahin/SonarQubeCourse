@@ -88,6 +88,9 @@ kubectl rollout status deployment sonarqube -n sonarqube
 > generate token 
 > token and url update : https://github.com/rifaterdemsahin/SonarQubeCourse/settings/secrets/actions
 
+> sonarproject -key update 
+> push 
+build 
 
 Use a template file 
 # SonarQube Configuration 🌐
